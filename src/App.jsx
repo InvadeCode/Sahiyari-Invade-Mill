@@ -22,7 +22,10 @@ import {
   Activity,
   Shield,
   Linkedin,
-  FileText
+  FileText,
+  Target,
+  Users,
+  ArrowUpRight
 } from 'lucide-react';
 
 const IMAGES = {
@@ -164,9 +167,9 @@ export default function App() {
           
           <button onClick={() => setCurrentPage('home')} className="flex-shrink-0 cursor-pointer flex items-center gap-4 group">
             <div className="flex items-center gap-6">
-              <img src={IMAGES.invadeMillLogo} alt="Invade Mill" className="h-[40px] w-auto object-contain drop-shadow-md" />
-              <div className="w-px h-8 bg-white/20 hidden md:block"></div>
-              <img src={IMAGES.sahiyariLogo} alt="Sahiyari" className="h-[35px] w-auto object-contain drop-shadow-md" />
+              <img src={IMAGES.invadeMillLogo} alt="Invade Mill" className="h-[60px] md:h-[70px] w-auto object-contain drop-shadow-md" />
+              <div className="w-px h-10 bg-white/20 hidden md:block"></div>
+              <img src={IMAGES.sahiyariLogo} alt="Sahiyari" className="h-[55px] md:h-[65px] w-auto object-contain drop-shadow-md" />
             </div>
           </button>
           
@@ -220,9 +223,9 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
             <div className="lg:col-span-5">
               <div className="flex items-center gap-6 mb-8">
-                <img src={IMAGES.invadeMillLogo} alt="Invade Mill" className="h-[40px] w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
-                <div className="w-px h-8 bg-white/20"></div>
-                <img src={IMAGES.sahiyariLogo} alt="Sahiyari" className="h-[35px] w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+                <img src={IMAGES.invadeMillLogo} alt="Invade Mill" className="h-[55px] w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
+                <div className="w-px h-10 bg-white/20"></div>
+                <img src={IMAGES.sahiyariLogo} alt="Sahiyari" className="h-[50px] w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all" />
               </div>
               <p className="text-slate-100/50 font-light text-[14px] max-w-md leading-relaxed mb-8">
                 A processing and food value-addition division strengthening the agri-to-food supply chain through milling, trading, branded staples, and institutional supply.
@@ -286,7 +289,7 @@ function HomeContent({ setPage }) {
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-[7.5rem] font-light leading-[0.95] tracking-tighter mb-8 text-white uppercase reveal-on-scroll visible">
-            INVADE MILL TAKES OVER<br />
+            INVADE MILL TAKES OVER <br />
             <span className="font-medium text-amber-400">ZUMBA FOODS.</span>
           </h1>
           
@@ -937,6 +940,19 @@ function OperationsContent({ setPage }) {
 
 function DecisionMakersContent({ setPage }) {
   usePageScroll();
+
+  const boardMembers = [
+    { name: "Meenal S Patwardhan", title: "MD & Vice-Chairman, Asia" },
+    { name: "Chirag Kotecha", title: "CEO & MD, Invade Mill" },
+    { name: "Dr. MY Farooqui", title: "Additional Director" },
+    { name: "Vishal Jamdade", title: "Director (Agro Inputs), India" },
+    { name: "Bhavin Kapadia", title: "Director - Funds (Global)" },
+    { name: "Yagnik Waghela", title: "Director - Investor Relations" },
+    { name: "Mahesh Mastan", title: "Director - Public Relations" },
+    { name: "Trevor D'souza", title: "Director - Operations" },
+    { name: "Hitesh Waghela", title: "CFO, India" }
+  ];
+
   return (
     <>
       <section className="sticky top-0 h-screen w-full flex flex-col justify-center bg-slate-950 text-white relative overflow-hidden pt-20 z-0 px-[3%]">
@@ -948,41 +964,78 @@ function DecisionMakersContent({ setPage }) {
           <h1 className="text-5xl md:text-7xl lg:text-[7.5rem] font-light tracking-tighter uppercase leading-[1.05] mb-10 text-white">
             BOARD <br />MEMBERS.
           </h1>
-          <p className="text-slate-100/80 font-light text-[16px] md:text-[18px] leading-relaxed max-w-2xl">
-            The minds steering the global agricultural transition. Our leadership team brings together decades of expertise in agronomy, supply chain logistics, and strategic M&A execution.
-          </p>
+          <div className="border-l border-amber-500/50 pl-6">
+            <p className="text-slate-100/80 font-light text-[16px] md:text-[18px] leading-relaxed max-w-2xl">
+              The minds steering the global agricultural transition. Our leadership team brings together decades of expertise in agronomy, supply chain logistics, and strategic execution.
+            </p>
+          </div>
         </div>
       </section>
 
       <main className="relative z-10 bg-white rounded-t-[32px] shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+        
         <section className="px-[3%] w-full bg-white relative overflow-hidden py-[10vh] lg:py-[15vh]">
           <div className="w-full reveal-on-scroll">
             <div className="text-left mb-16 lg:mb-24">
-              <p className="text-[10px] font-bold tracking-ultra text-slate-500 uppercase mb-4">Leadership</p>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-slate-900 leading-[1.1] uppercase w-full">
-                EXECUTIVE DIRECTORS.
+              <p className="text-[10px] font-bold tracking-ultra text-slate-500 uppercase mb-4">A Message from Leadership</p>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter text-slate-900 leading-[1.1] mb-16 max-w-5xl uppercase">
+                "Our focus has always been on building <span className="font-medium text-amber-500">disciplined operating structures</span> that empower farmers and scale across borders."
+              </h2>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start pt-12 lg:pt-16 border-t border-slate-200">
+              <div className="lg:w-1/3 flex flex-col items-start w-full">
+                 <div className="w-20 h-20 rounded-full bg-slate-100 text-amber-600 flex items-center justify-center mb-6">
+                   <span className="text-xl font-medium tracking-widest">KC</span>
+                 </div>
+                 <h3 className="text-2xl lg:text-3xl font-light text-slate-900 mb-2">Kamlesh M. Chotalia</h3>
+                 <p className="text-[11px] font-bold tracking-widest text-slate-500 uppercase mb-8">Executive Director & Chairman<br/>Kigali, Rwanda</p>
+                 <a href="https://www.linkedin.com/in/kc6666/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 text-slate-950 bg-amber-400 hover:bg-slate-900 hover:text-white px-8 py-4 rounded-full transition-all shadow-xl hover:-translate-y-1">
+                   <Linkedin size={16} />
+                   <span className="text-[11px] font-bold tracking-widest uppercase">Connect</span>
+                 </a>
+              </div>
+              <div className="lg:w-2/3 space-y-6 text-slate-600 font-light text-[15px] md:text-[17px] leading-relaxed w-full">
+                <p className="text-xl text-slate-900 font-medium mb-4">
+                  Driving regional expansion through structured growth.
+                </p>
+                <p>
+                  Kamlesh M. Chotalia (KC) brings over 28 years of leadership experience across agriculture and food processing. He has played a key role in shaping IAG's regional expansion and building disciplined operating structures across all our markets.
+                </p>
+                <p>
+                  As Chairman and Executive Director, he oversees strategic growth, high-level partnerships, and rigorous corporate governance. His vision guides IAG's long-term direction across its global footprint, ensuring that our operations remain both profitable and sustainably impactful.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="px-[3%] w-full bg-slate-50 relative overflow-hidden py-[10vh] lg:py-[15vh]">
+          <div className="w-full reveal-on-scroll">
+            <div className="text-left mb-16 lg:mb-24">
+              <p className="text-[10px] font-bold tracking-ultra text-slate-500 uppercase mb-4">The Leadership</p>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tighter uppercase leading-[1.1] text-slate-900">
+                DIRECTORS & CORE TEAM.
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[{
-                name: "Kamlesh M. Chotalia",
-                title: "Chairman & Executive Director",
-                bio: "With over 35 years in global agri-commodities, Kamlesh leads the macro-strategy for Invade Agro. His vision to move up the value chain from trading to processing spearheaded the Zumba Foods acquisition.",
-                li: "#"
-              }, {
-                name: "Yagnik Waghela",
-                title: "Executive Director",
-                bio: "Overseeing daily operations and capital allocation, Yagnik ensures operational bottlenecks are eliminated. He manages investor relations and ensures compliance across all IAG subsidiaries.",
-                li: "#"
-              }].map((leader, i) => (
-                <div key={i} className="bg-slate-50 rounded-[32px] p-10 border border-slate-200">
-                  <h3 className="text-3xl font-medium text-slate-900 mb-2">{leader.name}</h3>
-                  <p className="text-[11px] font-bold text-amber-500 tracking-widest uppercase mb-6">{leader.title}</p>
-                  <p className="text-[14px] text-slate-600 font-light leading-relaxed mb-8">{leader.bio}</p>
-                  <a href={leader.li} className="inline-flex items-center gap-2 text-[12px] font-medium text-slate-900 hover:text-amber-500 transition-colors">
-                    <Linkedin size={16} /> LinkedIn Profile
-                  </a>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {boardMembers.map((member, i) => (
+                <div key={i} className="bg-white border border-slate-200 rounded-[24px] p-8 hover:border-amber-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center mb-6 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-500">
+                      <span className="text-sm font-medium tracking-widest">{member.name.split(' ').map(n => n[0]).join('').substring(0, 2)}</span>
+                    </div>
+                    <h3 className="text-xl font-medium mb-2 text-slate-900">{member.name}</h3>
+                    <p className="text-amber-600 font-bold text-[10px] tracking-widest uppercase leading-relaxed">{member.title}</p>
+                  </div>
+                  <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <button className="inline-flex items-center gap-2 text-slate-400 hover:text-amber-500 transition-colors">
+                      <Linkedin size={18} />
+                      <span className="text-[10px] font-bold tracking-widest uppercase">Profile</span>
+                    </button>
+                    <ArrowUpRight size={18} className="text-slate-200 group-hover:text-amber-500 transition-colors" />
+                  </div>
                 </div>
               ))}
             </div>
