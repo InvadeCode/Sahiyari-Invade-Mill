@@ -944,13 +944,13 @@ function DecisionMakersContent({ setPage }) {
   const boardMembers = [
     { name: "Meenal S Patwardhan", title: "MD & Vice-Chairman, Asia" },
     { name: "Chirag Kotecha", title: "CEO & MD, Invade Mill" },
-    //{ name: "Dr. MY Farooqui", title: "Additional Director" },
-    //{ name: "Vishal Jamdade", title: "Director (Agro Inputs), India" },
+    { name: "Dr. MY Farooqui", title: "Additional Director" },
+    { name: "Vishal Jamdade", title: "Director (Agro Inputs), India" },
     { name: "Bhavin Kapadia", title: "Director - Funds (Global)" },
-    //{ name: "Yagnik Waghela", title: "Director - Investor Relations" },
-    //{ name: "Mahesh Mastan", title: "Director - Public Relations" },
-    { name: "Trevor D'souza", title: "Director - Operations" }
-    //{ name: "Hitesh Waghela", title: "CFO, India" }
+    { name: "Yagnik Waghela", title: "Director - Investor Relations" },
+    { name: "Mahesh Mastan", title: "Director - Public Relations" },
+    { name: "Trevor D'souza", title: "Director - Operations" },
+    { name: "Hitesh Waghela", title: "CFO, India" }
   ];
 
   return (
@@ -1226,101 +1226,126 @@ function InvestorsContent({ setPage }) {
 
 function ContactContent({ setPage }) {
   usePageScroll();
-  const [formState, setFormState] = useState('idle');
+  const mapRef = React.useRef(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormState('loading');
-    setTimeout(() => {
-      setFormState('success');
-      e.target.reset();
-      setTimeout(() => setFormState('idle'), 4000);
-    }, 1500);
-  };
+  React.useEffect(() => {
+    // Load Leaflet CSS
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link');
+      link.id = 'leaflet-css';
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    let mapInstance = null;
+
+    const initMap = () => {
+      if (!mapRef.current || mapInstance || !window.L) return;
+      
+      const L = window.L;
+      
+      // Initialize map centered between Gujarat and Maharashtra
+      mapInstance = L.map(mapRef.current, {
+        zoomControl: false 
+      }).setView([21.447, 72.750], 6);
+      
+      // Add bottom-right zoom controls so it doesn't overlap headers
+      L.control.zoom({ position: 'bottomright' }).addTo(mapInstance);
+
+      // Carto Light minimal basemap for corporate aesthetic
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(mapInstance);
+
+      // Custom Amber Pin Styling
+      const markerHtmlStyles = "background-color: #fbbf24; width: 1.5rem; height: 1.5rem; display: block; left: -0.75rem; top: -0.75rem; position: relative; border-radius: 3rem 3rem 0; transform: rotate(45deg); border: 2px solid #ffffff; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);";
+      
+      const customIcon = L.divIcon({
+        className: "custom-pin",
+        iconAnchor: [0, 24],
+        popupAnchor: [0, -24],
+        html: "<span style='" + markerHtmlStyles + "'></span>"
+      });
+
+      // Add Pins
+      L.marker([19.1983, 72.9554], {icon: customIcon}).addTo(mapInstance)
+        .bindPopup('<b style="color: #0f172a; font-family: Poppins; font-size: 13px;">Corporate Office</b><br/><span style="color: #64748b; font-family: Poppins; font-size: 11px;">Thane, MH</span>');
+        
+      L.marker([23.6960, 72.5463], {icon: customIcon}).addTo(mapInstance)
+        .bindPopup('<b style="color: #0f172a; font-family: Poppins; font-size: 13px;">Manufacturing Base</b><br/><span style="color: #64748b; font-family: Poppins; font-size: 11px;">Visnagar, GJ</span>');
+    };
+
+    // Load Leaflet JS
+    if (!document.getElementById('leaflet-js')) {
+      const script = document.createElement('script');
+      script.id = 'leaflet-js';
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = initMap;
+      document.head.appendChild(script);
+    } else if (window.L) {
+      initMap();
+    }
+
+    return () => {
+      if (mapInstance) {
+        mapInstance.remove();
+      }
+    };
+  }, []);
 
   return (
     <>
-      <section className="sticky top-0 h-screen w-full flex flex-col justify-center bg-slate-950 text-white relative overflow-hidden pt-20 z-0 px-[3%]">
+      <section className="sticky top-0 h-screen w-full flex flex-col justify-center bg-slate-950 text-white relative overflow-hidden pt-32 z-0">
         <div className="absolute inset-0 bg-black/40 mix-blend-overlay z-0"></div>
         <img src={IMAGES.corporateAbstract} onError={handleImageError} className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity" alt="Corporate" />
         
-        <div className="w-full relative z-10 reveal-on-scroll">
-          <p className="text-[10px] font-bold tracking-[0.25em] text-amber-400 uppercase mb-6">CONTACT US</p>
+        <div className="w-full relative z-10 px-[3%] reveal-on-scroll">
+          <p className="text-[10px] font-bold tracking-[0.25em] text-amber-400 uppercase mb-6">CONTACT & LOCATIONS</p>
           <h1 className="text-5xl md:text-7xl lg:text-[7.5rem] font-light tracking-tighter uppercase leading-[1.05] mb-10 text-white">
-            REACH OUT <br />TODAY.
+            GLOBAL <br />PRESENCE.
           </h1>
-          <p className="text-slate-100/80 font-light text-[16px] md:text-[18px] leading-relaxed max-w-2xl">
-            Submit commercial inquiries, partnership proposals, or operational questions regarding the Invade Mill and Sahiyari integration.
-          </p>
+          <div className="border-l border-amber-500/50 pl-6 ml-2">
+            <p className="text-slate-100/80 font-light text-[16px] md:text-[18px] leading-relaxed max-w-2xl">
+              Operating at the intersection of rural procurement and urban distribution. Discover our corporate hubs and physical processing infrastructure.
+            </p>
+          </div>
         </div>
       </section>
 
       <main className="relative z-10 bg-white rounded-t-[32px] shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
-        <section className="px-[3%] w-full bg-white relative overflow-hidden py-[10vh] lg:py-[15vh]">
+        <section className="px-[3%] w-full min-h-[100vh] flex flex-col justify-center bg-white relative overflow-hidden py-[10vh] lg:py-[15vh]">
           <div className="w-full reveal-on-scroll">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
                
-               <div>
-                  <p className="text-[10px] font-bold tracking-ultra text-slate-500 uppercase mb-4">Direct Message</p>
-                  <h2 className="text-4xl md:text-5xl font-light tracking-tighter text-slate-900 leading-[1.1] mb-8 uppercase">
-                    SEND AN INQUIRY.
-                  </h2>
-                  <p className="text-[15px] font-light text-slate-600 mb-10 leading-relaxed">
-                    Please use the form below to connect with our administrative and commercial teams. Your inquiry will be securely routed.
-                  </p>
+               <div className="flex flex-col h-full min-h-[500px]">
+                  <div className="mb-8">
+                    <p className="text-[10px] font-bold tracking-ultra text-slate-500 uppercase mb-4">Infrastructure Map</p>
+                    <h2 className="text-4xl md:text-5xl font-light tracking-tighter text-slate-900 leading-[1.1] uppercase">
+                      FACILITIES.
+                    </h2>
+                  </div>
                   
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">First Name</label>
-                        <input type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-[12px] px-4 py-4 text-[14px] focus:outline-none focus:border-amber-400 transition-colors" placeholder="John" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Last Name</label>
-                        <input type="text" required className="w-full bg-slate-50 border border-slate-200 rounded-[12px] px-4 py-4 text-[14px] focus:outline-none focus:border-amber-400 transition-colors" placeholder="Doe" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Corporate Email</label>
-                      <input type="email" required className="w-full bg-slate-50 border border-slate-200 rounded-[12px] px-4 py-4 text-[14px] focus:outline-none focus:border-amber-400 transition-colors" placeholder="john@company.com" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Inquiry Type</label>
-                      <select className="w-full bg-slate-50 border border-slate-200 rounded-[12px] px-4 py-4 text-[14px] focus:outline-none focus:border-amber-400 transition-colors appearance-none">
-                        <option>Distribution & Sales</option>
-                        <option>Bulk Procurement (HoReCa)</option>
-                        <option>Media & PR</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Message</label>
-                      <textarea required rows="4" className="w-full bg-slate-50 border border-slate-200 rounded-[12px] px-4 py-4 text-[14px] focus:outline-none focus:border-amber-400 transition-colors resize-none" placeholder="How can we assist you?"></textarea>
-                    </div>
-                    <button type="submit" disabled={formState === 'loading' || formState === 'success'} className="w-full bg-slate-950 text-white font-bold text-[11px] tracking-widest uppercase rounded-[12px] py-5 hover:bg-amber-400 hover:text-slate-950 transition-all disabled:opacity-50">
-                      {formState === 'idle' && 'Submit Inquiry'}
-                      {formState === 'loading' && 'Sending...'}
-                      {formState === 'success' && 'Message Received'}
-                    </button>
-                    {formState === 'success' && (
-                       <p className="text-emerald-600 text-[12px] text-center mt-2 flex items-center justify-center gap-2">
-                         <CheckCircle2 size={14}/> We will get back to you shortly.
-                       </p>
-                    )}
-                  </form>
+                  {/* Leaflet Map Container */}
+                  <div 
+                    ref={mapRef} 
+                    className="w-full flex-grow rounded-[32px] border border-slate-200 shadow-sm z-10 overflow-hidden bg-slate-100"
+                  ></div>
                </div>
                
-               <div className="bg-slate-50 p-10 lg:p-12 rounded-[32px] border border-slate-200 h-fit">
-                  <h3 className="text-2xl font-medium text-slate-900 mb-8">Headquarters</h3>
+               <div className="bg-slate-50 p-10 lg:p-14 rounded-[32px] border border-slate-200 h-full flex flex-col justify-center">
+                  <h3 className="text-3xl font-light text-slate-900 mb-10">Headquarters & Operations</h3>
                   
-                  <div className="space-y-8">
-                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 mt-1">
-                           <Building2 size={18} className="text-slate-900"/>
+                  <div className="space-y-10">
+                     <div className="flex items-start gap-6">
+                        <div className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center shrink-0 mt-1">
+                           <Building2 size={20} className="text-amber-500"/>
                         </div>
                         <div>
-                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-1">Corporate Office</p>
-                           <p className="text-[14px] font-light text-slate-700 leading-relaxed">
+                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-2">Corporate Office</p>
+                           <h4 className="text-[16px] font-medium text-slate-900 mb-1">Invade Mill Limited</h4>
+                           <p className="text-[14px] font-light text-slate-600 leading-relaxed">
                               8th Floor, Centrum IT Park,<br/>
                               Unit No. 805 & 806, Plot No. D-1,<br/>
                               Neheru Nagar, Wagle Industrial Estate,<br/>
@@ -1329,27 +1354,29 @@ function ContactContent({ setPage }) {
                         </div>
                      </div>
                      
-                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 mt-1">
-                           <MapPin size={18} className="text-slate-900"/>
+                     <div className="flex items-start gap-6">
+                        <div className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center shrink-0 mt-1">
+                           <MapPin size={20} className="text-amber-500"/>
                         </div>
                         <div>
-                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-1">Manufacturing Base</p>
-                           <p className="text-[14px] font-light text-slate-700 leading-relaxed">
-                              Invade Mill Facility,<br/>
+                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-2">Manufacturing Base</p>
+                           <h4 className="text-[16px] font-medium text-slate-900 mb-1">Visnagar Facility</h4>
+                           <p className="text-[14px] font-light text-slate-600 leading-relaxed">
+                              Food Processing Division,<br/>
                               Visnagar, Mehsana,<br/>
                               Gujarat, India - 384315
                            </p>
                         </div>
                      </div>
 
-                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 mt-1">
-                           <Mail size={18} className="text-slate-900"/>
+                     <div className="flex items-start gap-6 pt-6 border-t border-slate-200">
+                        <div className="w-12 h-12 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center shrink-0 mt-1">
+                           <Mail size={20} className="text-amber-500"/>
                         </div>
                         <div>
-                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-1">General Inquiries</p>
-                           <a href="mailto:info@invademill.com" className="text-[14px] font-medium text-slate-900 hover:text-amber-500 transition-colors">info@invademill.com</a>
+                           <p className="text-[11px] font-bold tracking-widest text-slate-400 uppercase mb-2">Commercial Inquiries</p>
+                           <a href="mailto:info@invademill.com" className="text-[16px] font-medium text-slate-900 hover:text-amber-500 transition-colors">info@invademill.com</a>
+                           <p className="text-[13px] font-light text-slate-500 mt-1">For distribution and bulk procurement.</p>
                         </div>
                      </div>
                   </div>
