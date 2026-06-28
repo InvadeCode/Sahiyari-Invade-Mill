@@ -286,8 +286,7 @@ function HomeContent({ setPage }) {
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-[7.5rem] font-light leading-[0.95] tracking-tighter mb-8 text-white uppercase reveal-on-scroll visible">
-            INVADE MILL <br />
-            TAKES OVER <br/>
+            INVADE MILL TAKES OVER<br />
             <span className="font-medium text-amber-400">ZUMBA FOODS.</span>
           </h1>
           
