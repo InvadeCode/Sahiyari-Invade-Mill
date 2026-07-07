@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin } from 'lucide-react';
 
 const IMAGES = {
@@ -25,6 +25,8 @@ function usePageScroll() {
 }
 
 export default function App() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  
   usePageScroll();
 
   useEffect(() => {
@@ -64,11 +66,36 @@ export default function App() {
       }
     `;
     document.head.appendChild(style);
+
+    const handleHeaderScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+    
+    window.addEventListener('scroll', handleHeaderScroll);
+    handleHeaderScroll(); 
+    return () => window.removeEventListener('scroll', handleHeaderScroll);
   }, []);
 
   return (
     <div className="min-h-screen w-[100vw] selection:bg-amber-400 selection:text-slate-950 relative flex flex-col overflow-x-hidden">
       
+      {/* Header - No Navigation */}
+      <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${
+        isScrolled 
+        ? 'bg-slate-950 border-b border-white/10 shadow-2xl py-3 text-white' 
+        : 'bg-transparent border-transparent py-6 text-white'
+      }`}>
+        <div className="flex justify-between items-center px-[1%] w-full">
+          <div className="flex-shrink-0 flex items-center gap-4 group">
+            <div className="flex items-center gap-6">
+              <img src={IMAGES.invadeMillLogo} alt="Invade Mill" className="h-[60px] md:h-[70px] w-auto object-contain drop-shadow-md" />
+              <div className="w-px h-10 bg-white/20 hidden md:block"></div>
+              <img src={IMAGES.sahiyariLogo} alt="Sahiyari" className="h-[55px] md:h-[65px] w-auto object-contain drop-shadow-md" />
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Main Content Area - Hero Section */}
       <div className="flex-grow w-full">
         <section className="h-screen w-full flex flex-col justify-center overflow-hidden z-0 bg-slate-950 px-[3%] relative">
@@ -78,7 +105,7 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/70 to-slate-950/95"></div>
           
           <div className="relative z-10 flex flex-col items-start text-left w-full">
-            <div className="flex items-center gap-4 mb-8 bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 reveal-on-scroll visible w-fit">
+            <div className="flex items-center gap-4 mb-8 bg-white/5 backdrop-blur-md px-6 py-2 rounded-full border border-white/10 reveal-on-scroll visible w-fit mt-20">
               <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
               <p className="text-[10px] font-semibold tracking-[0.3em] uppercase text-amber-400">Backed by Invade Agro Global</p>
             </div>
